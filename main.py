@@ -528,10 +528,11 @@ def run_single_bot_turn(game, player):
     if tile.type == "event":
         trigger_event_card(game, player, tile.name)
 
+    persist_game(game)
+
     resolve_bot_pending_action(game, player)
     maybe_open_bot_build_menu(game, player)
     end_turn(game)
-
 
 def run_bot_turns_until_human(game):
     safety_counter = 0
@@ -1960,6 +1961,7 @@ with board_col:
                     trigger_event_card(game, player, tile.name)
 
                 st.session_state.turn_started = True
+                persist_game(game)
                 st.rerun()
         else:
             current_tile = find_tile_by_name(game.board, st.session_state.current_tile_name)
