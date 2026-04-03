@@ -340,10 +340,14 @@ def setup_game(player_names=None):
         player_names = ["Player 1", "Player 2", "Player 3"]
 
     player_colors = ["#2563eb", "#16a34a", "#dc2626", "#7c3aed", "#ea580c"]
+    player_avatars = ["🧍🏻", "🧍🏻‍♂️", "🧍🏻‍♀️", "🧍", "🧑"]
+    player_border_colors = ["#dc2626", "#2563eb", "#eab308", "#7c3aed", "#ea580c"]
 
     for i, name in enumerate(player_names):
         p = Player(name)
         p.color = player_colors[i % len(player_colors)]
+        p.avatar = player_avatars[i % len(player_avatars)]
+        p.border_color = player_border_colors[i % len(player_border_colors)]
         game.players.append(p)
 
     for player in game.players:
@@ -1188,18 +1192,10 @@ def render_board_visual_html(board, players, current_tile_name=None):
             owner_badge = f"<div class='pusto-owner-badge' style='background:{owner_color};'>{owner_initial}</div>"
         # -------------------------------------------
         owner_bg = owner_colors.get(owner_name, "rgba(255,255,255,0.04)")
-        player_border_colors = {
-            "Player 1": "#dc2626",  # red
-            "Player 2": "#2563eb",  # blue
-            "Player 3": "#eab308",  # yellow
-            "Bot 1": "#2563eb",
-            "Bot 2": "#eab308",
-        }
+        players_on_tile_for_border = [player for player in players if player.position == index]
 
-        players_on_tile = [player.name for player in players if player.position == index]
-
-        if players_on_tile:
-            border_color = player_border_colors.get(players_on_tile[0], "#f59e0b")
+        if players_on_tile_for_border:
+            border_color = getattr(players_on_tile_for_border[0], "border_color", "#f59e0b")
         else:
             border_color = "#f59e0b" if current_tile_name == tile.name else "rgba(255, 255, 255, 0.95)"
         if tile.type == "region":
@@ -1225,15 +1221,11 @@ def render_board_visual_html(board, players, current_tile_name=None):
             band_dark, band_light = "#374151", "#d1d5db"
             tile_class = "pusto-generic"
 
-        token_emoji_map = {
-            "Player 1": "🧍🏻",
-            "Bot 1": "🧍🏻‍♂️",
-            "Bot 2": "🧍🏻‍♀️",
-        }
+        players_on_tile = [player for player in players if player.position == index]
 
         token_html = "".join(
-            f"<span class='pusto-token'>{token_emoji_map.get(player_name, '🧍')}</span>"
-            for player_name in players_on_tile
+            f"<span class='pusto-token'>{getattr(player, 'avatar', '🧍')}</span>"
+            for player in players_on_tile
         )
 
         building_emoji_map = {
@@ -1964,6 +1956,7 @@ with board_col:
                     trigger_event_card(game, player, tile.name)
 
                 st.session_state.turn_started = True
+                game.pending_action = getattr(game, "pending_action", None)
                 persist_game(game)
                 game.turn_started = st.session_state.turn_started
                 game.last_roll = st.session_state.last_roll
