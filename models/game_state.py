@@ -6,20 +6,27 @@ class GameState:
         self.round = 1
         self.game_log = []
         self.pending_action = None
+        self.current_player_index = 0
 
     def get_current_player(self):
-        return self.players[self.current_turn_index]
+        if not self.players:
+            return None
+        return self.players[self.current_player_index]
 
     def next_turn(self):
-        self.current_turn_index = (self.current_turn_index + 1) % len(self.players)
-        if self.current_turn_index == 0:
+        if not self.players:
+            return
+
+        self.current_player_index += 1
+
+        if self.current_player_index >= len(self.players):
+            self.current_player_index = 0
             self.round += 1
-        self.pending_action = None
 
     def to_dict(self):
         return {
             "round": self.round,
-            "current_player_index": getattr(self, "current_player_index", 0),
+            "current_player_index": self.current_player_index,
             "turn_started": getattr(self, "turn_started", False),
             "last_roll": getattr(self, "last_roll", None),
             "current_tile_name": getattr(self, "current_tile_name", None),
