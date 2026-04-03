@@ -1644,7 +1644,10 @@ def render_intro_screen():
                 st.session_state.current_tile_name = None
                 st.session_state.build_prompt_tile = None
                 st.session_state.trade_offer = None
+                st.session_state.active_event_media = None
                 st.session_state.active_event_card = None
+                if "game_id" in st.session_state:
+                    del st.session_state.game_id
                 st.session_state.game_started = True
                 st.rerun()
         else:
@@ -1664,7 +1667,10 @@ def render_intro_screen():
                 st.session_state.current_tile_name = None
                 st.session_state.build_prompt_tile = None
                 st.session_state.trade_offer = None
+                st.session_state.active_event_media = None
                 st.session_state.active_event_card = None
+                if "game_id" in st.session_state:
+                    del st.session_state.game_id
                 st.session_state.game_started = True
                 st.rerun()
 
@@ -1715,7 +1721,7 @@ if not st.session_state.game_started or game is None:
     render_intro_screen()
     st.stop()
 
-if "game_id" not in st.session_state:
+if "game_id" not in st.session_state or not st.session_state.game_id:
     st.session_state.game_id = create_new_game(game)
 elif st.session_state.game is None:
     # joining existing game → do NOT overwrite it
@@ -1754,8 +1760,11 @@ with side_col:
         st.session_state.trade_offer = None
         st.session_state.active_event_media = None
         st.session_state.active_event_card = None
+        if "game_id" in st.session_state:
+            del st.session_state.game_id
         st.session_state.game_started = False
         st.rerun()
+
     with st.expander("Game Rules", expanded=False):
         st.markdown(render_game_rules_html(), unsafe_allow_html=True)
     st.write(f"**Round:** {game.round}")
@@ -1925,6 +1934,8 @@ with board_col:
             st.session_state.trade_offer = None
             st.session_state.active_event_media = None
             st.session_state.active_event_card = None
+            if "game_id" in st.session_state:
+                del st.session_state.game_id
             st.session_state.game_started = False
             st.rerun()
     else:
