@@ -34,6 +34,7 @@ def rebuild_game_from_state(state):
     game.players = []
 
     game.round = state.get("round", 1)
+    game.current_player_index = state.get("current_player_index", 0)
 
     for player_data in state.get("players", []):
         player = Player(player_data["name"])
