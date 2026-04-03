@@ -44,12 +44,12 @@ class GameState:
             ],
 
             "board": [
-                {
+                 {
                     "name": t.name,
                     "type": t.type,
                     "price": getattr(t, "price", None),
                     "rent": getattr(t, "rent", None),
-                    "owner": getattr(t, "owner", None),
+                    "owner": t.owner.name if getattr(t, "owner", None) else None,
                     "buildings": getattr(t, "buildings", []),
                 }
                 for t in self.board
