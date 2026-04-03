@@ -1732,6 +1732,9 @@ elif st.session_state.game is None:
 loaded_state = load_game_state(st.session_state.game_id)
 game = rebuild_game_from_state(loaded_state)
 st.session_state.game = game
+st.session_state.turn_started = game.turn_started
+st.session_state.last_roll = game.last_roll
+st.session_state.current_tile_name = game.current_tile_name
 
 st.write("Game ID:", st.session_state.game_id)
 
@@ -1962,6 +1965,9 @@ with board_col:
 
                 st.session_state.turn_started = True
                 persist_game(game)
+                game.turn_started = st.session_state.turn_started
+                game.last_roll = st.session_state.last_roll
+                game.current_tile_name = st.session_state.current_tile_name
                 st.rerun()
         else:
             current_tile = find_tile_by_name(game.board, st.session_state.current_tile_name)
