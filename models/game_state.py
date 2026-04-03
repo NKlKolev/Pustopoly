@@ -40,6 +40,8 @@ class GameState:
                     "resources": p.resources,
                     "skip_turns": getattr(p, "skip_turns", 0),
                     "color": getattr(p, "color", None),
+                    "avatar": getattr(p, "avatar", "🧍"),
+                    "border_color": getattr(p, "border_color", "#ffffff"),
                 }
                 for p in self.players
             ],
