@@ -56,6 +56,8 @@ def rebuild_game_from_state(state):
         )
         player.skip_turns = player_data.get("skip_turns", 0)
         player.color = player_data.get("color")
+        player.avatar = player_data.get("avatar", "🧍")
+        player.border_color = player_data.get("border_color", "#ffffff")
         player.properties = []
         game.players.append(player)
 
