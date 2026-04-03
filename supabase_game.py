@@ -35,6 +35,10 @@ def rebuild_game_from_state(state):
 
     game.round = state.get("round", 1)
     game.current_player_index = state.get("current_player_index", 0)
+    game.turn_started = state.get("turn_started", False)
+    game.last_roll = state.get("last_roll", None)
+    game.current_tile_name = state.get("current_tile_name", None)
+    game.pending_action = state.get("pending_action", None)
 
     for player_data in state.get("players", []):
         player = Player(player_data["name"])
