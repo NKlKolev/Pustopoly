@@ -7,6 +7,8 @@ class Player:
         self.in_jail = False
         self.skip_turns = 0
         self.color = None
+        self.avatar = "🧍"
+        self.border_color = "#ffffff"
 
         self.resources = {
             "materials": 0,
