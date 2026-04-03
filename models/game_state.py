@@ -30,6 +30,7 @@ class GameState:
             "turn_started": getattr(self, "turn_started", False),
             "last_roll": getattr(self, "last_roll", None),
             "current_tile_name": getattr(self, "current_tile_name", None),
+            "pending_action": getattr(self, "pending_action", None),
 
             "players": [
                 {
